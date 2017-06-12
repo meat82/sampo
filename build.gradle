@@ -1,0 +1,76 @@
+def tomcat_home='F:/apps/eclipse-sts/pivotal-tc-server-developer-3.2.4.SR1/base-instance'
+def tomcat_webapps = tomcat_home + '/webapps'
+def web_app = 'F:/workspaces/springmvctest/build/libs'
+def warName = 'sampo'
+
+ext{
+	springVersion='4.3.9.RELEASE'
+	javaServletApiVersion='3.0.1'
+	javaServletJstlVersion='1.2'
+	javaServletJpsVersion='2.3.1'
+	slf4jVersion='1.7.6'
+	log4jVersion='1.2.17'
+	apacheTilesVersion='3.0.7'
+	apacheRequestAPIVersion='1.0.6'
+	apacheCommonsLang3Version='3.5'
+	velocityVersion='2.0'
+	freeMarkerVersion='2.3.15'
+	mvelVersion='2.0.11'
+	ognlVersion='2.7.3'
+	
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'war'
+
+war {
+	tomcat_home + '/' + warName + '.war'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+	compile ("org.springframework:spring-core:" + springVersion)
+	compile ("org.springframework:spring-web:" + springVersion)
+    compile ("org.springframework:spring-webmvc:" + springVersion)
+	compile("javax.servlet:javax.servlet-api:" + javaServletApiVersion)
+	compile("javax.servlet:jstl:" + javaServletJstlVersion)
+	compile("javax.servlet.jsp:javax.servlet.jsp-api:" + javaServletJpsVersion)
+	compile("log4j:log4j:"+log4jVersion) 
+	compile("org.slf4j:slf4j-api:" + slf4jVersion)
+	
+	//Spring Tiles dependency START
+	compile("org.apache.tiles:tiles-api:" + apacheTilesVersion)
+	compile("org.apache.tiles:tiles-core:" + apacheTilesVersion)
+	compile("org.apache.tiles:tiles-jsp:" + apacheTilesVersion)
+	compile("org.apache.tiles:tiles-servlet:" + apacheTilesVersion)
+	compile("org.apache.tiles:tiles-template:" + apacheTilesVersion)
+	compile("org.apache.tiles:tiles-request-api:" + apacheRequestAPIVersion)
+	compile("org.apache.velocity:velocity-tools:" + velocityVersion)
+	compile("org.freemarker:freemarker:" + freeMarkerVersion)
+	compile("org.mvel:mvel2:" + mvelVersion)
+	compile("ognl:ognl:" + ognlVersion)
+	//Spring Tiles dependency END
+	
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: apacheCommonsLang3Version
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.4'
+}
+task webDeploy() {
+    copy {
+		from web_app + '/' + warName + '.war'
+        into tomcat_webapps
+    }
+}
+task explodedWar(type: Sync) {
+    into "$buildDir" + '/' + 'libs' + '/' + warName
+    with war
+}
