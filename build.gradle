@@ -1,6 +1,6 @@
 def tomcat_home='F:/apps/eclipse-sts/pivotal-tc-server-developer-3.2.4.SR1/base-instance'
 def tomcat_webapps = tomcat_home + '/webapps'
-def web_app = 'F:/workspaces/springmvctest/build/libs'
+def web_app = 'build/libs'
 def warName = 'sampo'
 
 ext{
@@ -10,6 +10,7 @@ ext{
 	javaServletJpsVersion='2.3.1'
 	slf4jVersion='1.7.6'
 	log4jVersion='1.2.17'
+	mySqlVersion='6.0.6'
 	apacheTilesVersion='3.0.7'
 	apacheRequestAPIVersion='1.0.6'
 	apacheCommonsLang3Version='3.5'
@@ -24,10 +25,6 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'war'
 
-war {
-	tomcat_home + '/' + warName + '.war'
-}
-
 repositories {
     mavenCentral()
 }
@@ -39,11 +36,13 @@ dependencies {
 	compile ("org.springframework:spring-core:" + springVersion)
 	compile ("org.springframework:spring-web:" + springVersion)
     compile ("org.springframework:spring-webmvc:" + springVersion)
+    compile ("org.springframework:spring-jdbc:" + springVersion)
 	compile("javax.servlet:javax.servlet-api:" + javaServletApiVersion)
 	compile("javax.servlet:jstl:" + javaServletJstlVersion)
 	compile("javax.servlet.jsp:javax.servlet.jsp-api:" + javaServletJpsVersion)
 	compile("log4j:log4j:"+log4jVersion) 
 	compile("org.slf4j:slf4j-api:" + slf4jVersion)
+	compile("mysql:mysql-connector-java:" + mySqlVersion)
 	
 	//Spring Tiles dependency START
 	compile("org.apache.tiles:tiles-api:" + apacheTilesVersion)
@@ -64,7 +63,7 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '3.4'
 }
-task webDeploy() {
+task webDeploy(dependsOn: war) {
     copy {
 		from web_app + '/' + warName + '.war'
         into tomcat_webapps

@@ -4,7 +4,23 @@
 	margin-bottom: 0;
 	border-radius: 0;
 }
-
+.navbar-inverse{
+	border-color: transparent;
+	background-color: #0ddef1;
+}
+.navbar-inverse .navbar-nav>li>a{
+	color: #f9f6f6
+}
+.navbar-inverse .navbar-nav>li>a:HOVER{
+	color: black;
+}
+.navbar-brand {
+	padding: 0px 15px;
+}
+.navbar-brand>img {
+	width: 50px;
+	height: 50px;
+}
 /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
 .row.content {
 	height: 700px
@@ -20,7 +36,7 @@
 
 /* Set black background color, white text and some padding */
 footer {
-	background-color: #555;
+	background-color: #0ddef1;
 	color: white;
 	padding: 15px;
 }
