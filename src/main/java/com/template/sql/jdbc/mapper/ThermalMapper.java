@@ -13,7 +13,7 @@ public class ThermalMapper implements RowMapper<Thermal> {
 	public Thermal mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 		Thermal thermal = new Thermal();
-		thermal.setDate(rs.getDate("CREATE_DATE"));
+		thermal.setTimeStamp(rs.getTimestamp("CREATE_DATE"));
 		thermal.setDegree(rs.getBigDecimal("DEGREE"));
 		return thermal;
 	}
