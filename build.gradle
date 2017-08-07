@@ -18,6 +18,7 @@ ext{
 	freeMarkerVersion='2.3.15'
 	mvelVersion='2.0.11'
 	ognlVersion='2.7.3'
+	jacksonVersion='2.6.3'
 	
 }
 
@@ -43,6 +44,8 @@ dependencies {
 	compile("log4j:log4j:"+log4jVersion) 
 	compile("org.slf4j:slf4j-api:" + slf4jVersion)
 	compile("mysql:mysql-connector-java:" + mySqlVersion)
+	compile("com.fasterxml.jackson.core:jackson-core:" + jacksonVersion)
+	compile("com.fasterxml.jackson.core:jackson-databind:" + jacksonVersion)
 	
 	//Spring Tiles dependency START
 	compile("org.apache.tiles:tiles-api:" + apacheTilesVersion)
@@ -63,7 +66,7 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '3.4'
 }
-task webDeploy(dependsOn: war) {
+task webDeploy(dependsOn: build) {
     copy {
 		from web_app + '/' + warName + '.war'
         into tomcat_webapps

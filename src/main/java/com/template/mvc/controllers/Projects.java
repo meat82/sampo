@@ -7,10 +7,12 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.template.mvc.controllers.model.Thermal;
 import com.template.sql.jdbc.services.ThermalService;
 
@@ -23,17 +25,19 @@ public class Projects {
 	ThermalService thermalService;
 	
     @RequestMapping(value = "/sauna", method = RequestMethod.GET)
-    public String sauna(Locale locale, Model model) {
-        if(logger.isInfoEnabled()){
-        	logger.info("Welcome home! The client locale is {}." + locale.toString());
-        }
+    public String sauna(Locale locale, ModelMap modelMap) {
         List<Thermal> thermals =  thermalService.getThermals();
-        
-        for (Thermal thermal : thermals) {
-			System.out.println("thermal: " + thermal);
-			Date date = new Date(thermal.getTimeStamp().getTime());
-			System.out.println("date: " + date);
-		}
+    	ObjectMapper mapper = new ObjectMapper();
+    	String mappedValue = null;
+    	try {
+            mappedValue = mapper.writeValueAsString(thermals);
+        } catch (JsonProcessingException e) {
+        	logger.error(e, e);
+        }
+    	if(logger.isDebugEnabled()){
+    		logger.debug("mappedValue: " + mappedValue);
+    	}
+        modelMap.addAttribute("thermals", mappedValue);
         return "sauna";
     }
 	

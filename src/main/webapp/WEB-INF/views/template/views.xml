@@ -5,5 +5,6 @@
 <tiles-definitions>
     <definition name="template" extends="base.definition">
         <put-attribute name="body" value="/WEB-INF/views/template/body.jsp"></put-attribute>
+        <put-attribute name="jsscript" value=""></put-attribute>
     </definition>
 </tiles-definitions>
